@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BirthYearValidatorDirective } from '../../../directives/birth-year-validator.directive';
+import { EmployeesService } from '../../../services/employees.service';
 
 @Component({
   selector: 'app-new-employee',
@@ -12,9 +13,16 @@ import { BirthYearValidatorDirective } from '../../../directives/birth-year-vali
 })
 export class NewEmployeeComponent {
 
-  public newEmployeeSubmit(f:NgForm){
-    console.log(f); // iskviesti visa ngForm objekta
+    constructor(private employeesService:EmployeesService){
+   
+    }
+
+    public newEmployeeSubmit(f:NgForm){
+    // console.log(f); // iskviesti visa ngForm objekta
     console.log(f.form.value); // iskviesti formos informacija
-    
+
+    this.employeesService.addEmployee(f.form.value).subscribe(()=> {
+      f.form.reset();
+    });
   }
 }

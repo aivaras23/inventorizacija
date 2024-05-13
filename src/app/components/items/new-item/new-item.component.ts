@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ItemsService } from '../../../services/items.service';
+import { Observable, map } from 'rxjs';
+import { EmployeesService } from '../../../services/employees.service';
+import { Employee } from '../../../models/employee';
 
 @Component({
   selector: 'app-new-item',
@@ -12,9 +15,10 @@ import { ItemsService } from '../../../services/items.service';
 })
 export class NewItemComponent {
   public itemForm:FormGroup;
+  public employees:Employee[]=[];
 
 
-  constructor(private itemsService:ItemsService){
+  constructor(private itemsService:ItemsService, private employeesService:EmployeesService){
     this.itemForm = new FormGroup({
       // 'inv_number':new FormControl('1555'),
       'inv_number':new FormControl(null, [Validators.required, Validators.minLength(3), this.validateInvNumber]),
@@ -26,6 +30,10 @@ export class NewItemComponent {
         new FormControl(null, Validators.required)
       ]),
     });
+
+    this.employeesService.loadEmployees().subscribe((data)=>{
+      this.employees=data;
+    })
   }
 
   onSubmit(){
@@ -46,6 +54,14 @@ export class NewItemComponent {
     } 
       return {error: 'Klaida'};
     
+  }
+
+   static createUniqueInvNumberValidator(itemsService:ItemsService){
+    return (control:FormControl):Promise<ValidationErrors | null> | Observable<ValidationErrors | null>=>{
+   
+      return  itemsService.loadItems().pipe(map((data)=> null));
+    };
+
   }
 
   // Paiimti laukeliu location masyve esancius inputus kaip masyva 

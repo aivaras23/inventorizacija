@@ -36,7 +36,9 @@
                 <div class="mb-3 row">
                     <label for="" class="col-sm-3 col-form-label text-end">Atsakingas darbuotojas:</label>
                     <div class="col-sm-9">
-                        <input class="form-control" formControlName="responsible_employee_id">
+                        <select class="form-control" formControlName="responsible_employee_id">
+                            <option *ngFor="let employee of employees; let i=index" [value]="employee.id">{{ employee.name }} {{ employee.surname }}</option>
+                        </select>
 
                     </div>
                 </div>
