@@ -16,12 +16,22 @@ import { Employee } from '../../../models/employee';
 export class NewItemComponent {
   public itemForm:FormGroup;
   public employees:Employee[]=[];
+  public lastNumber:number=0;
 
 
   constructor(private itemsService:ItemsService, private employeesService:EmployeesService){
     this.itemForm = new FormGroup({
       // 'inv_number':new FormControl('1555'),
-      'inv_number':new FormControl(null, [Validators.required, Validators.minLength(3), this.validateInvNumber]),
+      //'inv_number':new FormControl(null, [Validators.required, Validators.minLength(3), this.validateInvNumber]),
+      'inv_number': new FormControl(this.lastNumber, 
+        {
+          validators:[
+            Validators.required
+          ],
+          asyncValidators:[
+            ItemsService.createUniqueInvNumberValidator(itemsService)
+          ]
+        }),
       'name':new FormControl(null, [Validators.required, Validators.minLength(3)]),
       'type':new FormControl(null),
       'responsible_employee_id':new FormControl(null, Validators.required),
@@ -36,6 +46,13 @@ export class NewItemComponent {
     })
   }
 
+   private resetForm(){
+    this.itemsService.getLastInvNumber().subscribe((n)=>{
+      this.lastNumber=n;
+      (this.itemForm.get('inv_number') as FormControl).setValue(n);
+    });
+  }
+
   onSubmit(){
     console.log(this.itemForm.value);
     this.itemsService.addItem(this.itemForm.value).subscribe(()=>{
@@ -43,6 +60,7 @@ export class NewItemComponent {
       (this.itemForm.get('locations') as FormArray).controls=[
         new FormControl(null, Validators.required)
       ]
+      this.resetForm();
     })
   }
 
@@ -55,6 +73,7 @@ export class NewItemComponent {
       return {error: 'Klaida'};
     
   }
+
 
    static createUniqueInvNumberValidator(itemsService:ItemsService){
     return (control:FormControl):Promise<ValidationErrors | null> | Observable<ValidationErrors | null>=>{
@@ -83,3 +102,16 @@ export class NewItemComponent {
   }
 
 }
+
+/* static - galima nekurti objekto, galima tiesiog iskviesti metoda,
+galima tiesiog klases pavadinima panaudoti, pvz:
+
+public static suma(x:number,y:number){
+  return x + y;
+}
+
+console.log(NewItemComponent.suma(5,8))
+
+
+
+*/
