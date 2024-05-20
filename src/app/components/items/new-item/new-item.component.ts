@@ -5,18 +5,77 @@ import { ItemsService } from '../../../services/items.service';
 import { Observable, map } from 'rxjs';
 import { EmployeesService } from '../../../services/employees.service';
 import { Employee } from '../../../models/employee';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-new-item',
   standalone: true,
   imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './new-item.component.html',
-  styleUrl: './new-item.component.css'
+  styleUrl: './new-item.component.css',
+  // animaciju, trigeriu idejimas
+  animations: [
+    trigger('caption',[
+      state('normal', style({
+        'color':'#000000',
+        transform:'translateX(0px)'
+      })),
+      state('clicked1', style({
+        'color':'#00ff00',
+        transform:'translateX(-2000px)'
+      })),
+      state('clicked2', style({
+      'color':'#ff0000',
+      })),
+      // 'normal<=>clicked'
+      // transition('* <=> *') 
+      transition('* <=> *',[
+        animate(1000)
+      ]),
+    ]),
+
+    trigger('locationInput',[
+       state("*", style({
+        transform:"translateX(0px) translateY(0px)",
+        height:'38px'
+      })),
+      transition("void => *",[
+        //Aukstis 0 , atvaizduojamas uz ekrano ribu
+        style({
+          height:'0px',
+          transform:"translateX(-2000px) translateY(300px)"
+        }),
+        //Ispleciame laisva vieta is auksccio
+        animate(500, style({
+          height:'38px',
+          transform:"translateX(-2000px) translateY(300px)"
+        })),
+        //Ivaziuojame i tinkama vieta
+        animate(1000)
+      ]),
+      transition("* => void",[
+        //aukstis 0 , atvaizduojamas uz ekrano ribu
+        
+        animate(1000, style({
+          height:'38px',
+          transform:"translateX(2000px) translateY(300px)"
+        })),
+        //Ivaziuojame u tinkama vieta
+        animate(500, style({
+          height:'0px',
+          transform:"translateX(2000px) translateY(300px)"
+        }) 
+        )
+      ])
+    ])
+  ]
 })
 export class NewItemComponent {
   public itemForm:FormGroup;
   public employees:Employee[]=[];
   public lastNumber:number=0;
+
+  public captionState='normal';
 
 
   constructor(private itemsService:ItemsService, private employeesService:EmployeesService){
@@ -40,6 +99,8 @@ export class NewItemComponent {
         new FormControl(null, Validators.required)
       ]),
     });
+
+  (this.itemForm.get('name') as FormControl)
 
     this.employeesService.loadEmployees().subscribe((data)=>{
       this.employees=data;
@@ -99,6 +160,21 @@ export class NewItemComponent {
 
   public removeLocationField(){
     (this.itemForm.get('locations') as FormArray).removeAt(-1);
+  }
+
+  public captionClick(){
+    switch (this.captionState) {
+      case 'normal':
+        this.captionState='clicked1';
+        break;
+      case 'clicked1':
+        this.captionState='clicked2';
+        break;
+      case 'clicked2':
+        this.captionState='normal';
+        break;  
+    }
+    // this.captionState = (this.captionState == 'normal') ? 'clicked' : 'normal';
   }
 
 }

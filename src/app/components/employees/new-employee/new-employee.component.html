@@ -8,24 +8,24 @@
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label text-end">Vardas:</label>
                     <div class="col-sm-10">
-                        <input type="text" name="name" id="" class="form-control" [class.is-invalid]="!inputName.valid && inputName.touched" ngModel required minlength="2" maxlength="32" pattern="[a-zA-Z ]*" #inputName="ngModel">
-                        <div class="helper-block " *ngIf="!inputName.valid && inputName.touched">Vardas yra privalomas, turi buti 2-32 simboliu ilgio, galima ivesti tik raides ir tarpa</div>
+                        <input type="text" name="name" id="" class="form-control" [class.is-invalid]="!inputName.valid && inputName.touched" ngModel required minlength="2" maxlength="32" pattern="[a-zA-Z ]*" #inputName="ngModel" [@inputFields]="inputState[0]" (focus)="inputFocus(0,true)" (blur)="inputFocus(0,false)">
+                        <div [@errorBlock] class="helper-block " *ngIf="!inputName.valid && inputName.touched">Vardas yra privalomas, turi buti 2-32 simboliu ilgio, galima ivesti tik raides ir tarpa</div>
                     </div>
                 </div>
 
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label text-end">Pavarde:</label>
                     <div class="col-sm-10">
-                        <input type="text" name="surname" id="" class="form-control" [class.is-invalid]="!inputSurname.valid && inputSurname.touched" ngModel required minlength="2" maxlength="32" pattern="[a-zA-Z ]*" #inputSurname="ngModel">
-                        <div class="helper-block" *ngIf="!inputSurname.valid && inputSurname.touched">Pavarde yra privaloma, turi buti 2-32 simboliu ilgio, galima ivesti tik raides ir tarpa</div>
+                        <input type="text" name="surname" id="" class="form-control" [class.is-invalid]="!inputSurname.valid && inputSurname.touched" ngModel required minlength="2" maxlength="32" pattern="[a-zA-Z ]*" #inputSurname="ngModel" [@inputFields]="inputState[1]" (focus)="inputFocus(1,true)" (blur)="inputFocus(1,false)">
+                        <div [@errorBlock] class="helper-block" *ngIf="!inputSurname.valid && inputSurname.touched">Pavarde yra privaloma, turi buti 2-32 simboliu ilgio, galima ivesti tik raides ir tarpa</div>
                     </div>
                 </div>
 
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label text-end">Pozicija:</label>
                     <div class="col-sm-10">
-                        <input type="text" name="position" id="" class="form-control" [class.is-invalid]="!inputPosition.valid && inputPosition.touched" ngModel required #inputPosition="ngModel">
-                        <div class="helper-block " *ngIf="!inputPosition.valid && inputPosition.touched">Pozicijos laukelis yra privalomas</div>
+                        <input type="text" name="position" id="" class="form-control" [class.is-invalid]="!inputPosition.valid && inputPosition.touched" ngModel required #inputPosition="ngModel" [@inputFields]="inputState[2]" (focus)="inputFocus(2,true)" (blur)="inputFocus(2,false)">
+                        <div [@errorBlock] class="helper-block " *ngIf="!inputPosition.valid && inputPosition.touched" [@errorBlock]>Pozicijos laukelis yra privalomas</div>
                     </div>
                 </div>
 
@@ -33,8 +33,8 @@
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label text-end">El. Pastas:</label>
                     <div class="col-sm-10">
-                        <input type="text" name="email" id="" class="form-control" [class.is-invalid]="!inputEmail.valid && inputEmail.touched" ngModel required email #inputEmail="ngModel">
-                        <div class="helper-block " *ngIf="!inputEmail.valid && inputEmail.touched">Gimimo metai pastas yra privalomi</div>
+                        <input type="text" name="email" id="" class="form-control" [class.is-invalid]="!inputEmail.valid && inputEmail.touched" ngModel required email #inputEmail="ngModel" [@inputFields]="inputState[3]" (focus)="inputFocus(3,true)" (blur)="inputFocus(3,false)">
+                        <div [@errorBlock] class="helper-block " *ngIf="!inputEmail.valid && inputEmail.touched">Gimimo metai pastas yra privalomi</div>
                     </div>
                 </div>
 
@@ -42,8 +42,8 @@
                 <div class="mb-3 row">
                     <label for="" class="col-sm-2 col-form-label text-end">Gimimo metai:</label>
                     <div class="col-sm-10">
-                        <input type="number" name="birthYear" id="" class="form-control" [class.is-invalid]="!inputBirthYear.valid && inputBirthYear.touched" ngModel required #inputBirthYear="ngModel" birthYearValidator>
-                        <div class="helper-block " *ngIf="!inputBirthYear.valid && inputBirthYear.touched">Metai yra privalomas laukas, ne ankstesni nei 1900 ir darbuotojas privalo buti pilnametis</div>
+                        <input type="number" name="birthYear" id="" class="form-control" [class.is-invalid]="!inputBirthYear.valid && inputBirthYear.touched" ngModel required #inputBirthYear="ngModel" birthYearValidator [@inputFields]="inputState[4]" (focus)="inputFocus(4,true)" (blur)="inputFocus(4,false)">
+                        <div [@errorBlock] class="helper-block " *ngIf="!inputBirthYear.valid && inputBirthYear.touched">Metai yra privalomas laukas, ne ankstesni nei 1900 ir darbuotojas privalo buti pilnametis</div>
                     </div>
                 </div>
                 <div class="offset-sm-2">
